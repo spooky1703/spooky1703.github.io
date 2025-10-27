@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portafolio profesional de José Alonso Mota Ríos (Spooky17) - Data Scientist, Competitive Programmer y Researcher">
+    <title>spooky17@datascience:~$</title>
+    <style>
+        /* Terminal Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Terminal Colors */
+            --color-bg: #000000;
+            --color-text-primary: #00FF00;
+            --color-text-secondary: #FFFFFF;
+            --color-input: #00FFFF;
+            --color-warning: #FFFF00;
+            --color-error: #FF0000;
+            --color-highlight: #FF00FF;
+            
+            /* Typography */
+            --font-terminal: 'Courier New', 'Monaco', 'Lucida Console', monospace;
+            --font-size: 14px;
+            --letter-spacing: 0.1em;
+        }
+
+        html {
+            font-size: var(--font-size);
+            overflow: hidden;
+        }
+
+        body {
+            font-family: var(--font-terminal);
+            color: var(--color-text-primary);
+            background: var(--color-bg);
+            line-height: 1.6;
+            overflow: hidden;
+            letter-spacing: var(--letter-spacing);
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Terminal Container */
+        .terminal-container {
+            width: 100%;
+            height: 100vh;
+            background: var(--color-bg);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .terminal-header {
+            padding: 0.5rem 1rem;
+            background: #1a1a1a;
+            border-bottom: 1px solid #333;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .terminal-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .btn-close { background: #ff5555; }
+        .btn-minimize { background: #ffff55; }
+        .btn-maximize { background: #55ff55; }
+
+        .terminal-title {
+            margin-left: 1rem;
+            color: #888;
+            font-size: 12px;
+        }
+
+        .terminal-output {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            overflow-x: hidden;
+            color: var(--color-text-secondary);
+            font-size: var(--font-size);
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .terminal-output::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .terminal-output::-webkit-scrollbar-track {
+            background: #111;
+        }
+
+        .terminal-output::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+
+        .terminal-output::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        .output-line {
+            margin-bottom: 0.5rem;
+        }
+
+        .prompt {
+            color: var(--color-text-primary);
+            font-weight: bold;
+        }
+
+        .command-input-line {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-input {
+            color: var(--color-input);
+        }
+
+        .ascii-art {
+            color: var(--color-input);
+            line-height: 1.2;
+            font-size: 12px;
+        }
+
+        .ascii-logo {
+            color: var(--color-text-primary);
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+
+        .section-header {
+            color: var(--color-highlight);
+            font-weight: bold;
+            margin: 1rem 0 0.5rem 0;
+        }
+
+        .info-line {
+            color: var(--color-text-secondary);
+        }
+
+        .highlight {
+            color: var(--color-input);
+            font-weight: bold;
+        }
+
+        .warning {
+            color: var(--color-warning);
+        }
+
+        .error {
+            color: var(--color-error);
+        }
+
+        .success {
+            color: var(--color-text-primary);
+        }
+
+        .terminal-input-container {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background: var(--color-bg);
+            border-top: 1px solid #111;
+        }
+
+        .terminal-prompt {
+            color: var(--color-text-primary);
+            font-weight: bold;
+            margin-right: 0.5rem;
+            white-space: nowrap;
+        }
+
+        #terminalInput {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--color-input);
+            font-family: var(--font-terminal);
+            font-size: var(--font-size);
+            letter-spacing: var(--letter-spacing);
+            caret-color: var(--color-input);
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 16px;
+            background: var(--color-text-primary);
+            animation: blink 1s step-end infinite;
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        .skill-bar {
+            display: inline-block;
+        }
+
+        .file-item {
+            color: var(--color-input);
+        }
+
+        .directory-item {
+            color: var(--color-highlight);
+            font-weight: bold;
+        }
+
+        a {
+            color: var(--color-input);
+            text-decoration: underline;
+        }
+
+        a:hover {
+            color: var(--color-text-primary);
+        }
+
+        /* Mobile Helper Buttons */
+        .mobile-helper {
+            display: none;
+            position: fixed;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 0.5rem;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 90%;
+            z-index: 1000;
+        }
+
+        .helper-btn {
+            background: #1a1a1a;
+            border: 1px solid var(--color-text-primary);
+            color: var(--color-text-primary);
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            font-family: var(--font-terminal);
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .helper-btn:hover,
+        .helper-btn:active {
+            background: var(--color-text-primary);
+            color: var(--color-bg);
+        }
+
+        @media (max-width: 768px) {
+            .mobile-helper {
+                display: flex;
+            }
+
+            .terminal-output {
+                padding: 0.5rem;
+                font-size: 12px;
+                padding-bottom: 5rem;
+            }
+
+            .terminal-input-container {
+                padding: 0.5rem;
+            }
+
+            #terminalInput {
+                font-size: 12px;
+            }
+
+            .ascii-logo {
+                font-size: 8px;
+            }
+
+            .ascii-art {
+                font-size: 10px;
+            }
+        }
+
+        /* Old styles to remove - Navigation */
+        /* Remove old nav styles */
+        .old-floating-nav {
+            position: fixed;
+            left: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 1.5rem 0.8rem;
+            box-shadow: var(--glass-shadow);
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            position: relative;
+        }
+
+        .nav-dot::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition-fast);
+            font-size: 0.85rem;
+        }
+
+        .nav-dot:hover::after {
+            opacity: 1;
+        }
+
+        .nav-dot:hover,
+        .nav-dot.active {
+            background: var(--color-cyan);
+            box-shadow: 0 0 20px var(--color-cyan);
+            transform: scale(1.3);
+        }
+
+        /* Loading Terminal Boot */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--color-bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 0.3s ease;
+            color: var(--color-text-primary);
+            font-family: var(--font-terminal);
+        }
+
+        #loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .boot-text {
+            color: var(--color-text-primary);
+            font-size: 12px;
+            text-align: left;
+            line-height: 1.8;
+        }
+
+        .boot-line {
+            margin: 0.2rem 0;
+        }
+
+        /* Remove old main container */
+        .old-main-container {
+            position: relative;
+            z-index: 1;
+            padding: 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* Remove old mobile menu */
+        .old-mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            z-index: 2000;
+            width: 50px;
+            height: 50px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            cursor: pointer;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .mobile-menu-btn span {
+            width: 20px;
+            height: 2px;
+            background: var(--color-cyan);
+            transition: var(--transition-fast);
+        }
+
+        .mobile-menu-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-menu-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .terminal-output {
+                padding: 0.5rem;
+                font-size: 12px;
+                padding-bottom: 5rem;
+            }
+
+            .terminal-input-container {
+                padding: 0.5rem;
+            }
+
+            #terminalInput {
+                font-size: 12px;
+            }
+
+            .ascii-logo {
+                font-size: 8px;
+            }
+
+            .ascii-art {
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </style>
+</head>
+<body>
+    <!-- Terminal Boot Screen -->
+    <div id="loading-screen">
+        <div class="boot-text">
+            <div class="boot-line">[  OK  ] Started Linux Terminal.</div>
+            <div class="boot-line">[  OK  ] Reached target Multi-User System.</div>
+            <div class="boot-line">[  OK  ] Started Portfolio Service.</div>
+            <div class="boot-line">        </div>
+            <div class="boot-line">Booting portfolio system...</div>
+            <div class="boot-line">Loading user profile: spooky17</div>
+        </div>
+    </div>
+
+    <!-- Terminal Container -->
+    <div class="terminal-container">
+        <div class="terminal-header">
+            <div class="terminal-button btn-close"></div>
+            <div class="terminal-button btn-minimize"></div>
+            <div class="terminal-button btn-maximize"></div>
+            <div class="terminal-title">spooky17@datascience: ~</div>
+        </div>
+        
+        <div class="terminal-output" id="terminalOutput"></div>
+        
+        <div class="terminal-input-container">
+            <span class="terminal-prompt" id="currentPrompt">spooky17@datascience:~$</span>
+            <input type="text" id="terminalInput" autocomplete="off" autofocus />
+        </div>
+    </div>
+    
+    <!-- Mobile Helper Buttons -->
+    <div class="mobile-helper">
+        <button class="helper-btn" onclick="executeCommand('help')">help</button>
+        <button class="helper-btn" onclick="executeCommand('ls')">ls</button>
+        <button class="helper-btn" onclick="executeCommand('about')">about</button>
+        <button class="helper-btn" onclick="executeCommand('skills')">skills</button>
+        <button class="helper-btn" onclick="executeCommand('projects')">projects</button>
+        <button class="helper-btn" onclick="executeCommand('clear')">clear</button>
+    </div>
+        <!-- Old content removed -->
+        <!--
+        <div id="hero" class="bento-grid">
+            <!-- Main Hero Card -->
+            <div class="glass-card hero-card fade-in delay-1">
+                <div class="hero-content">
+                    <div class="hero-avatar">👨‍💻</div>
+                    <h1 class="hero-name">José Alonso Mota Ríos</h1>
+                    <p class="hero-alias">@Spooky17</p>
+                    <p class="hero-role">Data Scientist · Competitive Programmer · Researcher</p>
+                    <div class="hero-location">
+                        <span>📍</span>
+                        <span>México</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Card -->
+            <div class="glass-card stats-card fade-in delay-2">
+                <div class="card-icon">📈</div>
+                <h3 class="card-title">Estadísticas</h3>
+                <div class="stat-item">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">Años de experiencia</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">25+</div>
+                    <div class="stat-label">Repositorios</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">Commits</div>
+                </div>
+            </div>
+
+            <!-- Education Card -->
+            <div class="glass-card education-card fade-in delay-3">
+                <div class="card-icon">🎓</div>
+                <h3 class="card-title">Educación</h3>
+                <p class="card-subtitle">Instituto Politécnico Nacional (IPN)</p>
+                <p class="card-text"><strong>Ciencia de Datos</strong></p>
+                <p class="card-text">Una de las instituciones más prestigiosas de México en investigación y desarrollo tecnológico.</p>
+            </div>
+
+            <!-- Primary Skills Card -->
+            <div class="glass-card skills-card fade-in delay-4">
+                <div class="card-icon">💻</div>
+                <h3 class="card-title">Lenguajes</h3>
+                <div class="lang-skills">
+                    <div class="lang-skill">
+                        <div class="lang-header">
+                            <span class="lang-name">C++</span>
+                            <span class="lang-percent">95%</span>
+                        </div>
+                        <div class="lang-bar">
+                            <div class="lang-progress" style="width: 95%;"></div>
+                        </div>
+                        <p class="lang-desc">Programación competitiva</p>
+                    </div>
+                    <div class="lang-skill">
+                        <div class="lang-header">
+                            <span class="lang-name">Python</span>
+                            <span class="lang-percent">95%</span>
+                        </div>
+                        <div class="lang-bar">
+                            <div class="lang-progress" style="width: 95%;"></div>
+                        </div>
+                        <p class="lang-desc">Data Science &amp; ML</p>
+                    </div>
+                    <div class="lang-skill">
+                        <div class="lang-header">
+                            <span class="lang-name">R</span>
+                            <span class="lang-percent">85%</span>
+                        </div>
+                        <div class="lang-bar">
+                            <div class="lang-progress" style="width: 85%;"></div>
+                        </div>
+                        <p class="lang-desc">Análisis estadístico</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bio/About Card -->
+            <div id="about" class="glass-card bio-card fade-in delay-5">
+                <div class="card-icon">🚀</div>
+                <h3 class="card-title">Sobre Mí</h3>
+                <p class="card-text">Con <strong>8 años de experiencia en programación</strong> que comenzó desde temprana edad, he desarrollado una sólida trayectoria en el campo de la tecnología y el análisis de datos.</p>
+                <p class="card-text">Mi verdadera pasión radica en la <strong>Ciencia de Datos y la Analítica Avanzada</strong>, donde me especializo en transformar datos complejos en insights accionables que impulsan decisiones estratégicas.</p>
+                <p class="card-text">Creo firmemente en diseñar e implementar soluciones innovadoras y eficientes para problemas del mundo real mediante análisis de datos, modelado predictivo y técnicas avanzadas de machine learning.</p>
+            </div>
+
+            <!-- Achievement Card -->
+            <div class="glass-card achievement-card fade-in delay-6">
+                <div class="achievement-icon">🏆</div>
+                <h3 class="achievement-title">Representante Estatal</h3>
+                <p class="achievement-subtitle">Olimpiada Mexicana de Informática</p>
+                <p class="card-text">Competidor de élite en la competencia nacional más prestigiosa de programación competitiva en México.</p>
+            </div>
+        </div>
+
+        <!-- Skills Grid -->
+        <div id="skills" class="bento-grid">
+            <!-- Tools & Technologies Card -->
+            <div class="glass-card skills-card fade-in delay-1">
+                <div class="card-icon">🛠️</div>
+                <h3 class="card-title">Herramientas</h3>
+                <div class="skill-tags">
+                    <span class="skill-tag">Git/GitHub</span>
+                    <span class="skill-tag">Docker</span>
+                    <span class="skill-tag">AWS</span>
+                    <span class="skill-tag">SQL</span>
+                    <span class="skill-tag">macOS</span>
+                    <span class="skill-tag">Windows</span>
+                </div>
+            </div>
+
+            <!-- Specializations Card -->
+            <div class="glass-card skills-card fade-in delay-2">
+                <div class="card-icon">🎯</div>
+                <h3 class="card-title">Especializaciones</h3>
+                <div class="skill-tags">
+                    <span class="skill-tag">Ciencia de Datos</span>
+                    <span class="skill-tag">Análisis de Datos</span>
+                    <span class="skill-tag">Machine Learning</span>
+                    <span class="skill-tag">Algorítmica</span>
+                    <span class="skill-tag">Resolución de Problemas</span>
+                </div>
+            </div>
+
+            <!-- Competitive Skills Card -->
+            <div class="glass-card skills-card fade-in delay-3">
+                <div class="card-icon">⚡</div>
+                <h3 class="card-title">Skills Competitivas</h3>
+                <div class="skill-tags">
+                    <span class="skill-tag">Algoritmos Avanzados</span>
+                    <span class="skill-tag">Estructuras de Datos</span>
+                    <span class="skill-tag">Optimización</span>
+                    <span class="skill-tag">Pensamiento Analítico</span>
+                    <span class="skill-tag">Presión Bajo Tiempo</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Projects Section with Masonry -->
+        <div class="projects-section" id="projects">
+            <div class="section-header">
+                <h2 class="section-title">Proyectos Destacados</h2>
+                <p class="section-subtitle">Explorando datos, construyendo soluciones</p>
+            </div>
+            <div class="masonry-grid">
+                <div class="project-card fade-in delay-1">
+                    <div class="project-icon">📊</div>
+                    <h3 class="project-title">Análisis Exploratorio de Datos</h3>
+                    <p class="project-desc">Exploración profunda de datasets complejos utilizando técnicas avanzadas de visualización y análisis estadístico para descubrir patrones ocultos.</p>
+                    <div class="project-tags">
+                        <span class="project-tag">Python</span>
+                        <span class="project-tag">Pandas</span>
+                        <span class="project-tag">Matplotlib</span>
+                    </div>
+                    <a href="https://github.com/spooky1703?tab=repositories" target="_blank" rel="noopener noreferrer" class="project-link">Ver en GitHub →</a>
+                </div>
+
+                <div class="project-card fade-in delay-2">
+                    <div class="project-icon">🤖</div>
+                    <h3 class="project-title">Modelo de Machine Learning</h3>
+                    <p class="project-desc">Desarrollo de modelos predictivos utilizando algoritmos de ML supervisado y no supervisado para resolver problemas reales de clasificación y regresión.</p>
+                    <div class="project-tags">
+                        <span class="project-tag">Python</span>
+                        <span class="project-tag">Scikit-learn</span>
+                        <span class="project-tag">TensorFlow</span>
+                    </div>
+                    <a href="https://github.com/spooky1703?tab=repositories" target="_blank" rel="noopener noreferrer" class="project-link">Ver en GitHub →</a>
+                </div>
+
+                <div class="project-card fade-in delay-3">
+                    <div class="project-icon">⚡</div>
+                    <h3 class="project-title">Algoritmo Competitivo</h3>
+                    <p class="project-desc">Implementación de algoritmos eficientes para resolver problemas complejos de programación competitiva con optimización de tiempo y espacio.</p>
+                    <div class="project-tags">
+                        <span class="project-tag">C++</span>
+                        <span class="project-tag">Algoritmos</span>
+                        <span class="project-tag">Optimización</span>
+                    </div>
+                    <a href="https://github.com/spooky1703?tab=repositories" target="_blank" rel="noopener noreferrer" class="project-link">Ver en GitHub →</a>
+                </div>
+
+                <div class="project-card fade-in delay-4">
+                    <div class="project-icon">🔮</div>
+                    <h3 class="project-title">Análisis Predictivo</h3>
+                    <p class="project-desc">Modelos de series temporales y regresión para predecir tendencias futuras basadas en patrones históricos utilizando técnicas estadísticas avanzadas.</p>
+                    <div class="project-tags">
+                        <span class="project-tag">R</span>
+                        <span class="project-tag">Regression</span>
+                        <span class="project-tag">Time Series</span>
+                    </div>
+                    <a href="https://github.com/spooky1703?tab=repositories" target="_blank" rel="noopener noreferrer" class="project-link">Ver en GitHub →</a>
+                </div>
+
+                <div class="project-card fade-in delay-5">
+                    <div class="project-icon">📈</div>
+                    <h3 class="project-title">Visualización de Datos</h3>
+                    <p class="project-desc">Creación de dashboards interactivos y visualizaciones dinámicas para comunicar insights complejos de manera clara y efectiva.</p>
+                    <div class="project-tags">
+                        <span class="project-tag">Python</span>
+                        <span class="project-tag">D3.js</span>
+                        <span class="project-tag">Tableau</span>
+                    </div>
+                    <a href="https://github.com/spooky1703?tab=repositories" target="_blank" rel="noopener noreferrer" class="project-link">Ver en GitHub →</a>
+                </div>
+
+                <div class="project-card fade-in delay-6">
+                    <div class="project-icon">🔄</div>
+                    <h3 class="project-title">Pipeline de Datos</h3>
+                    <p class="project-desc">Arquitectura ETL robusta para procesamiento automatizado de grandes volúmenes de datos con integración cloud y bases de datos relacionales.</p>
+                    <div class="project-tags">
+                        <span class="project-tag">Python</span>
+                        <span class="project-tag">SQL</span>
+                        <span class="project-tag">AWS</span>
+                    </div>
+                    <a href="https://github.com/spooky1703?tab=repositories" target="_blank" rel="noopener noreferrer" class="project-link">Ver en GitHub →</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact & GitHub Grid -->
+        <div id="github" class="bento-grid">
+            <!-- Contact Card -->
+            <div id="contact" class="glass-card contact-card fade-in delay-1">
+                <div class="card-icon">📨</div>
+                <h3 class="card-title">¿Colaboramos?</h3>
+                <p class="card-text">Estoy siempre abierto a nuevos proyectos, colaboraciones y oportunidades interesantes en ciencia de datos.</p>
+                <div class="contact-methods">
+                    <div class="contact-method">
+                        <div class="contact-icon">📧</div>
+                        <div class="contact-info">
+                            <h4>Email</h4>
+                            <a href="mailto:ryverz.alonso@gmail.com">ryverz.alonso@gmail.com</a>
+                        </div>
+                    </div>
+                    <div class="contact-method">
+                        <div class="contact-icon">📍</div>
+                        <div class="contact-info">
+                            <h4>Ubicación</h4>
+                            <p>México 🇲🇽</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GitHub Card -->
+            <div class="glass-card github-card fade-in delay-2">
+                <div class="card-icon">⚡</div>
+                <h3 class="card-title">GitHub Stats</h3>
+                <p class="card-subtitle">@spooky1703</p>
+                <div class="github-stats">
+                    <div class="github-stat">
+                        <div class="github-number">25+</div>
+                        <div class="github-label">Repos</div>
+                    </div>
+                    <div class="github-stat">
+                        <div class="github-number">500+</div>
+                        <div class="github-label">Commits</div>
+                    </div>
+                    <div class="github-stat">
+                        <div class="github-number">10+</div>
+                        <div class="github-label">Proyectos</div>
+                    </div>
+                </div>
+                <a href="https://github.com/spooky1703?tab=repositories" target="_blank" rel="noopener noreferrer" class="cta-button">Ver Perfil Completo →</a>
+            </div>
+        </div>
+    </div>
+
+
+
+    -->
+
+    <script>
+        // Terminal System Variables
+        let commandHistory = [];
+        let historyIndex = -1;
+        let currentDirectory = '~';
+        const terminalOutput = document.getElementById('terminalOutput');
+        const terminalInput = document.getElementById('terminalInput');
+        const currentPrompt = document.getElementById('currentPrompt');
+        
+        // File System Structure
+        const fileSystem = {
+            '~': {
+                'README.md': 'file',
+                'about': 'dir',
+                'skills': 'dir',
+                'projects': 'dir',
+                'achievements': 'dir',
+                'contact': 'dir'
+            },
+            '~/about': {
+                'bio.txt': 'file',
+                'education.txt': 'file',
+                'experience.txt': 'file'
+            },
+            '~/skills': {
+                'languages.txt': 'file',
+                'tools.txt': 'file',
+                'frameworks.txt': 'file'
+            },
+            '~/projects': {
+                'data_science': 'dir',
+                'competitive': 'dir',
+                'research': 'dir'
+            },
+            '~/achievements': {
+                'omi.txt': 'file'
+            },
+            '~/contact': {
+                'info.txt': 'file'
+            }
+        };
+        
+        // Boot sequence
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loading-screen').classList.add('hidden');
+                displayWelcome();
+                terminalInput.focus();
+            }, 2000);
+        });
+
+        // Welcome Screen with ASCII Art
+        function displayWelcome() {
+            const welcome = `
+Last login: Mon Oct 27 12:53:15 2025
+Linux datascience 5.15.0-78-generic #85-Ubuntu
+
+ _____ ____   ___   ___  _  __ __   __ _  _____
+/  ___||  _ \\ / _ \\ / _ \\| |/ / \\ \\ / /(_)|___  |
+\\ \`--. | |_) | | | | | | | ' /   \\ V /  _    / / 
+ \`--. \\|  __/| | | | | | |  <     \\ /  | |  / /  
+/\\__/ /| |   | |_| | |_| | . \\    | |  | | / /   
+\\____/ |_|    \\___/ \\___/|_|\\_\\   |_|  |_|/_/    
+                                                 
+     DATA SCIENTIST & COMPETITIVE PROGRAMMER
+
+<span class="highlight">Bienvenido al sistema.</span> Escribe '<span class="success">help</span>' para ver comandos disponibles.
+<span class="info-line">Usuario: Jose Alonso Mota Rios | Alias: Spooky17 | Ubicacion: Mexico</span>
+`;
+            addOutput(welcome);
+        }
+
+        // Output helper
+        function addOutput(text, includePrompt = false) {
+            const line = document.createElement('div');
+            line.className = 'output-line';
+            if (includePrompt) {
+                line.innerHTML = `<span class="prompt">${getCurrentPrompt()}</span> <span class="user-input">${text}</span>`;
+            } else {
+                line.innerHTML = text;
+            }
+            terminalOutput.appendChild(line);
+            terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        }
+        
+        function getCurrentPrompt() {
+            return `spooky17@datascience:${currentDirectory}$`;
+        }
+        
+        function updatePrompt() {
+            currentPrompt.textContent = getCurrentPrompt();
+        }
+
+        // Command Handler
+        terminalInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const command = terminalInput.value.trim();
+                if (command) {
+                    commandHistory.push(command);
+                    historyIndex = commandHistory.length;
+                    addOutput(command, true);
+                    executeCommand(command);
+                }
+                terminalInput.value = '';
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (historyIndex > 0) {
+                    historyIndex--;
+                    terminalInput.value = commandHistory[historyIndex];
+                }
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (historyIndex < commandHistory.length - 1) {
+                    historyIndex++;
+                    terminalInput.value = commandHistory[historyIndex];
+                } else {
+                    historyIndex = commandHistory.length;
+                    terminalInput.value = '';
+                }
+            } else if (e.key === 'Tab') {
+                e.preventDefault();
+                // Simple autocomplete
+                const partial = terminalInput.value;
+                const commands = ['help', 'ls', 'cd', 'cat', 'pwd', 'clear', 'whoami', 'about', 'skills', 'projects', 'contact', 'github', 'omi', 'tree', 'history'];
+                const matches = commands.filter(cmd => cmd.startsWith(partial));
+                if (matches.length === 1) {
+                    terminalInput.value = matches[0];
+                }
+            }
+        });
+        
+        // Keep input focused
+        terminalOutput.addEventListener('click', () => {
+            terminalInput.focus();
+        });
+
+        // Execute Command
+        function executeCommand(cmd) {
+            const parts = cmd.split(' ');
+            const command = parts[0].toLowerCase();
+            const args = parts.slice(1);
+            
+            switch(command) {
+                case 'help':
+                    showHelp();
+                    break;
+                case 'ls':
+                    listDirectory(args[0]);
+                    break;
+                case 'cd':
+                    changeDirectory(args[0]);
+                    break;
+                case 'pwd':
+                    addOutput(currentDirectory);
+                    break;
+                case 'cat':
+                    catFile(args[0]);
+                    break;
+                case 'clear':
+                    terminalOutput.innerHTML = '';
+                    break;
+                case 'whoami':
+                    showWhoami();
+                    break;
+                case 'about':
+                    showAbout();
+                    break;
+                case 'skills':
+                    showSkills();
+                    break;
+                case 'projects':
+                    showProjects();
+                    break;
+                case 'contact':
+                    showContact();
+                    break;
+                case 'github':
+                    showGithub();
+                    break;
+                case 'omi':
+                    showOmi();
+                    break;
+                case 'tree':
+                    showTree();
+                    break;
+                case 'history':
+                    showHistory();
+                    break;
+                case 'matrix':
+                    showMatrix();
+                    break;
+                case 'hack':
+                    showHack();
+                    break;
+                case '':
+                    break;
+                default:
+                    addOutput(`<span class="error">bash: ${command}: command not found</span>\nTry 'help' for available commands.`);
+            }
+        }
+
+        // Command Functions
+        function showHelp() {
+            const help = `
+<span class="section-header">Comandos disponibles:</span>
+
+<span class="highlight">NAVEGACION:</span>
+  ls              - listar archivos y directorios
+  cd <dir>        - cambiar directorio
+  pwd             - mostrar directorio actual
+  tree            - mostrar estructura de archivos
+
+<span class="highlight">INFORMACION:</span>
+  about           - informacion personal
+  skills          - habilidades tecnicas  
+  projects        - portfolio de proyectos
+  contact         - informacion de contacto
+
+<span class="highlight">ESPECIALES:</span>
+  omi             - logros en programacion competitiva
+  github          - repositorios y contribuciones
+  clear           - limpiar pantalla
+  history         - historial de comandos
+  whoami          - informacion del usuario actual
+  matrix          - [easter egg]
+  hack            - [easter egg]
+
+<span class="success">Tip:</span> Usa 'cat <archivo>' para leer archivos especificos
+<span class="success">Tip:</span> Usa TAB para autocompletar comandos
+<span class="success">Tip:</span> Usa las flechas arriba/abajo para navegar el historial
+`;
+            addOutput(help);
+        }
+
+        function listDirectory(path) {
+            const dir = path ? (path.startsWith('~') ? path : currentDirectory + '/' + path) : currentDirectory;
+            const contents = fileSystem[dir];
+            
+            if (!contents) {
+                addOutput(`<span class="error">ls: cannot access '${path}': No such file or directory</span>`);
+                return;
+            }
+            
+            let output = '';
+            for (const [name, type] of Object.entries(contents)) {
+                if (type === 'dir') {
+                    output += `<span class="directory-item">${name}/</span>  `;
+                } else {
+                    output += `<span class="file-item">${name}</span>  `;
+                }
+            }
+            addOutput(output);
+        }
+        
+        function changeDirectory(path) {
+            if (!path || path === '~') {
+                currentDirectory = '~';
+                updatePrompt();
+                return;
+            }
+            
+            if (path === '..') {
+                if (currentDirectory !== '~') {
+                    const parts = currentDirectory.split('/');
+                    parts.pop();
+                    currentDirectory = parts.join('/') || '~';
+                    updatePrompt();
+                }
+                return;
+            }
+            
+            const newPath = path.startsWith('~') ? path : currentDirectory + '/' + path;
+            
+            if (fileSystem[newPath]) {
+                currentDirectory = newPath;
+                updatePrompt();
+            } else {
+                addOutput(`<span class="error">cd: ${path}: No such file or directory</span>`);
+            }
+        }
+
+        function catFile(filename) {
+            if (!filename) {
+                addOutput(`<span class="error">cat: missing file operand</span>`);
+                return;
+            }
+            
+            const fileContent = {
+                'README.md': `
+<span class="section-header">===================================</span>
+<span class="section-header">    PORTFOLIO - JOSE ALONSO MOTA   </span>
+<span class="section-header">===================================</span>
+
+Bienvenido a mi portafolio interactivo estilo terminal.
+
+Explora usando comandos de Linux para descubrir mi experiencia,
+habilidades y proyectos en ciencia de datos.
+
+<span class="highlight">Comandos sugeridos:</span>
+  * cd about && cat bio.txt
+  * cat skills/languages.txt
+  * omi
+  * projects
+`,
+                'bio.txt': `
+<span class="section-header">=====================================</span>
+<span class="section-header">|        INFORMACION PERSONAL       |</span>
+<span class="section-header">=====================================</span>
+
+<span class="highlight">Nombre:</span> Jose Alonso Mota Rios
+<span class="highlight">Alias:</span>  Spooky17
+<span class="highlight">Email:</span>  ryverz.alonso@gmail.com
+<span class="highlight">GitHub:</span> <a href="https://github.com/spooky1703" target="_blank">https://github.com/spooky1703</a>
+
+[+] 8 anos de experiencia en programacion
+[+] Representante estatal en OMI
+[+] Estudiante de Ciencia de Datos - IPN
+[+] Especializacion en ML y Data Analytics
+
+<span class="section-header">=====================================</span>
+`,
+                'education.txt': `
+<span class="highlight">[*] EDUCACION</span>
+
+<span class="section-header">Instituto Politecnico Nacional (IPN)</span>
+Programa: Ciencia de Datos
+Estatus: Estudiante
+
+Una de las instituciones mas prestigiosas de Mexico
+en investigacion y desarrollo tecnologico.
+`,
+                'experience.txt': `
+<span class="highlight">[*] EXPERIENCIA</span>
+
+<span class="success">[+]</span> 8 anos de experiencia en programacion
+<span class="success">[+]</span> Inicio desde temprana edad
+<span class="success">[+]</span> Representante Estatal - OMI
+<span class="success">[+]</span> Especialista en Data Science & Analytics
+<span class="success">[+]</span> Competidor de programacion algortimica
+`,
+                'languages.txt': `
+<span class="section-header">&gt;&gt;&gt;&gt;&gt; LENGUAJES DE PROGRAMACION &lt;&lt;&lt;&lt;&lt;</span>
+
+<span class="highlight">C++</span>     [<span class="success">====================</span>] 95%
+        Programacion competitiva, algoritmos avanzados
+        
+<span class="highlight">Python</span>  [<span class="success">====================</span>] 95%
+        ML, analisis de datos, automatizacion
+        
+<span class="highlight">R</span>       [<span class="success">===============</span>     ] 85%
+        Estadistica y analisis exploratorio
+`,
+                'tools.txt': `
+<span class="highlight">[*] HERRAMIENTAS & TECNOLOGIAS</span>
+
+  * Git/GitHub
+  * Docker
+  * AWS
+  * SQL
+  * macOS
+  * Windows
+`,
+                'frameworks.txt': `
+<span class="highlight">[*] ESPECIALIZACIONES</span>
+
+  * Ciencia de Datos
+  * Analisis de Datos
+  * Machine Learning
+  * Programacion Algoritmica Competitiva
+  * Resolucion de Problemas Complejos
+`,
+                'omi.txt': `
+<span class="section-header">[+] EXPERIENCIA COMPETITIVA [+]</span>
+
+<span class="highlight">&gt;&gt;&gt; OLIMPIADA MEXICANA DE INFORMATICA &lt;&lt;&lt;</span>
+
+<span class="success">Status:</span> REPRESENTANTE ESTATAL
+<span class="success">Ano:</span> [CONFIDENCIAL]
+<span class="success">Ranking:</span> TOP NATIONAL LEVEL
+
+<span class="highlight">Habilidades desarrolladas:</span>
+  * Algoritmos avanzados
+  * Estructuras de datos complejas  
+  * Optimizacion bajo presion
+  * Pensamiento computacional
+  * Resolucion de problemas criticos
+
+<span class="section-header">OMI = La competencia nacional mas prestigiosa</span>
+<span class="section-header">      de programacion algoritmica en Mexico</span>
+`,
+                'info.txt': `
+<span class="section-header">[*] INFORMACION DE CONTACTO</span>
+
+<span class="highlight">Email:</span>     ryverz.alonso@gmail.com
+<span class="highlight">GitHub:</span>    <a href="https://github.com/spooky1703" target="_blank">github.com/spooky1703</a>
+<span class="highlight">Ubicacion:</span> Mexico
+
+<span class="success">Estoy abierto a colaboraciones y oportunidades!</span>
+`
+            };
+            
+            const content = fileContent[filename];
+            if (content) {
+                addOutput(content);
+            } else {
+                addOutput(`<span class="error">cat: ${filename}: No such file or directory</span>`);
+            }
+        }
+
+        function showWhoami() {
+            addOutput(`
+spooky17
+
+<span class="highlight">Full Name:</span> Jose Alonso Mota Rios
+<span class="highlight">Role:</span> Data Scientist & Competitive Programmer
+<span class="highlight">Location:</span> Mexico
+`);
+        }
+        
+        function showAbout() {
+            addOutput(`
+<span class="section-header">=====================================</span>
+<span class="section-header">|        SOBRE MI - SPOOKY17        |</span>
+<span class="section-header">=====================================</span>
+
+Con <span class="highlight">8 anos de experiencia en programacion</span> que comenzo desde
+temprana edad, he desarrollado una solida trayectoria en el campo
+de la tecnologia y el analisis de datos.
+
+Mi verdadera pasion radica en la <span class="highlight">Ciencia de Datos y la Analitica
+Avanzada</span>, donde me especializo en transformar datos complejos en
+insights accionables que impulsan decisiones estrategicas.
+
+Creo firmemente en disenar e implementar soluciones innovadoras
+y eficientes para problemas del mundo real mediante analisis de
+datos, modelado predictivo y tecnicas avanzadas de machine learning.
+
+<span class="success">[+]</span> Estudiante - Instituto Politecnico Nacional (IPN)
+<span class="success">[+]</span> Representante Estatal - OMI
+<span class="success">[+]</span> Data Scientist & Competitive Programmer
+`);
+        }
+        
+        function showSkills() {
+            addOutput(`
+<span class="section-header">&gt;&gt;&gt;&gt;&gt; HABILIDADES TECNICAS &lt;&lt;&lt;&lt;&lt;</span>
+
+<span class="highlight">LENGUAJES DE PROGRAMACION:</span>
+  C++     [<span class="success">====================</span>] 95% - Programacion competitiva
+  Python  [<span class="success">====================</span>] 95% - ML, Data Science
+  R       [<span class="success">===============</span>     ] 85% - Analisis estadistico
+
+<span class="highlight">HERRAMIENTAS:</span>
+  Git/GitHub  |  Docker  |  AWS  |  SQL  |  macOS  |  Windows
+
+<span class="highlight">ESPECIALIZACIONES:</span>
+  * Ciencia de Datos
+  * Analisis de Datos
+  * Machine Learning
+  * Algoritmos Avanzados
+  * Estructuras de Datos Complejas
+  * Optimizacion y Performance
+  * Resolucion de Problemas
+
+<span class="success">Tip:</span> Usa 'cat skills/languages.txt' para mas detalles
+`);
+        }
+        
+        console.log('%c👋 Hola! Bienvenido a mi portafolio', 'color: #00D9FF; font-size: 20px; font-weight: bold;');
+        console.log('%c💼 Busco oportunidades en Data Science', 'color: #BC13FE; font-size: 14px;');
+        console.log('%c📧 Contacto: ryverz.alonso@gmail.com', 'color: #39FF14; font-size: 14px;');
+    </script>
+</body>
+</html>
