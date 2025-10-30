@@ -69,9 +69,36 @@
             font-family: 'Courier New', monospace;
             font-size: 14px;
         }
+
+        .lang-button {
+            background: transparent;
+            border: 2px solid #00FF00;
+            color: #00FF00;
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            padding: 1rem 2rem;
+            margin: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .lang-button:hover {
+            background: #00FF00;
+            color: #000;
+            transform: scale(1.05);
+        }
+
+        .lang-button:active {
+            transform: scale(0.95);
+        }
+
+        .button-container {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
     </style>
     <link rel="shortcut icon" href="calaca.ico" />
-
 </head>
 <body>
     <!-- Pantalla 1: Selector de Idioma -->
@@ -81,13 +108,16 @@
 ║                                                      ║
 ║              LANGUAGE / IDIOMA                       ║
 ║                                                      ║
-║      <span style="color: #FFFF00;">[1]</span> Español                                     ║
-║      <span style="color: #FFFF00;">[2]</span> English                                     ║
-║                                                      ║
-║      <span style="color: #00FFFF;">Presiona 1 o 2 / Press 1 or 2</span>                   ║
-║                                                      ║
 ╚══════════════════════════════════════════════════════╝
         </pre>
+        <div class="button-container">
+            <button class="lang-button" onclick="selectLanguage('es')">
+                Español
+            </button>
+            <button class="lang-button" onclick="selectLanguage('en')">
+                English
+            </button>
+        </div>
     </div>
     
     <!-- Pantalla 2: Splash Screen -->
@@ -140,23 +170,12 @@
         }
         
         // ==================== PANTALLA 1: SELECTOR DE IDIOMA ====================
-        function initLanguageSelector() {
-            function langHandler(e) {
-                if (currentScreen !== 'lang-screen') return;
-                
-                if (e.key === '1') {
-                    lang = 'es';
-                    document.removeEventListener('keydown', langHandler);
-                    showSplash();
-                } else if (e.key === '2') {
-                    lang = 'en';
-                    document.removeEventListener('keydown', langHandler);
-                    showSplash();
-                }
-            }
-            document.addEventListener('keydown', langHandler);
+        function selectLanguage(langCode) {
+            lang = langCode;
+            showSplash();
         }
-        
+
+        // NO se necesita initLanguageSelector con teclas si usas botones
         // ==================== PANTALLA 2: SPLASH ====================
         function showSplash() {
             const info = lang === 'es' ? {
@@ -315,7 +334,7 @@ Available commands:
 <span style="color: #00FF00;">Nombre:</span> José Alonso Mota Ríos
 <span style="color: #00FF00;">Alias:</span>  Spooky17
 <span style="color: #00FF00;">Email:</span>  ryverz.alonso@gmail.com
-<span style="color: #00FF00;">GitHub:</span> https://github.com/spooky1703
+<span style="color: #00FF00;">GitHub:</span> https://github.com/spooky1703  
 <span style="color: #00FF00;">Ubicación:</span> México
 
 <span style="color: #FFFF00;">[+]</span> 8 años de experiencia en programación
@@ -339,7 +358,7 @@ Ciencia de Datos y la Analítica Avanzada.
 <span style="color: #00FF00;">Name:</span> José Alonso Mota Ríos
 <span style="color: #00FF00;">Alias:</span>  Spooky17
 <span style="color: #00FF00;">Email:</span>  ryverz.alonso@gmail.com
-<span style="color: #00FF00;">GitHub:</span> https://github.com/spooky1703
+<span style="color: #00FF00;">GitHub:</span> https://github.com/spooky1703  
 <span style="color: #00FF00;">Location:</span> México
 
 <span style="color: #FFFF00;">[+]</span> 8 years of programming experience
@@ -358,7 +377,7 @@ passion lies in Data Science and Advanced Analytics.
                 
                 case 'skills':
                     return lang === 'es' ? `<pre style="color: #00FF00; line-height: 1.6;">
-<span style="color: #00FFFF;">&gt;&gt;&gt; HABILIDADES TÉCNICAS &lt;&lt;&lt;</span>
+<span style="color: #00FFFF;">>>> HABILIDADES TÉCNICAS <<<</span>
 
 <span style="color: #FFFF00;">LENGUAJES DE PROGRAMACIÓN:</span>
 <span style="color: #00FF00;">[███████████████████████]</span> C++    [95%]
@@ -382,7 +401,7 @@ passion lies in Data Science and Advanced Analytics.
 <span style="color: #00FF00;">*</span> Programación Algorítmica Competitiva
 <span style="color: #00FF00;">*</span> Resolución de Problemas Complejos
 </pre>` : `<pre style="color: #00FF00; line-height: 1.6;">
-<span style="color: #00FFFF;">&gt;&gt;&gt; TECHNICAL SKILLS &lt;&lt;&lt;</span>
+<span style="color: #00FFFF;">>>> TECHNICAL SKILLS <<<</span>
 
 <span style="color: #FFFF00;">PROGRAMMING LANGUAGES:</span>
 <span style="color: #00FF00;">[███████████████████████]</span> C++    [95%]
@@ -407,24 +426,24 @@ passion lies in Data Science and Advanced Analytics.
 <span style="color: #00FF00;">*</span> Complex Problem Solving
 </pre>`;
                 
-case 'projects':
+                case 'projects':
                     return lang === 'es' ? `<pre style="color: #00FF00; line-height: 1.6;">
 <span style="color: #00FFFF;">|||||||||| PROYECTOS ||||||||||</span>
 
 <span style="color: #FFFF00;">[1]</span> <span style="color: #00FF00;">Descargador de musica local</span>
     └─ Optimización en descarga y manejo de música gratis
     └─ Tech: Python, Matplotlib
-    └─ GitHub: https://github.com/spooky1703/SoundcloudDWN
+    └─ GitHub: https://github.com/spooky1703/SoundcloudDWN  
 
 <span style="color: #FFFF00;">[2]</span> <span style="color: #00FF00;">Simulador de agujero negro</span>
     └─ Modelos predictivos con ML supervisado
     └─ Tech: c++, matematicas aplicadas
-    └─ GitHub: https://github.com/spooky1703/blackHole_Simulator
+    └─ GitHub: https://github.com/spooky1703/blackHole_Simulator  
 
 <span style="color: #FFFF00;">[3]</span> <span style="color: #00FF00;">Algoritmo Competitivo</span>
     └─ Algoritmos eficientes para competencias
     └─ Tech: C++, Algoritmos avanzados
-    └─ GitHub: https://github.com/spooky1703/OMEGAUP
+    └─ GitHub: https://github.com/spooky1703/OMEGAUP  
 
 <span style="color: #FFFF00;">[4]</span> <span style="color: #00FF00;">Análisis Predictivo</span>
     └─ Series temporales y regresión
@@ -434,7 +453,7 @@ case 'projects':
 <span style="color: #FFFF00;">[5]</span> <span style="color: #00FF00;">Pizarra virtual</span>
     └─ Dashboards interactivos
     └─ Tech: Python, Cv2
-    └─ GitHub: https://github.com/spooky1703/Virtual_Paint2
+    └─ GitHub: https://github.com/spooky1703/Virtual_Paint2  
 
 </pre>` : `<pre style="color: #00FF00; line-height: 1.6;">
 <span style="color: #00FFFF;">|||||||||| PROJECTS ||||||||||</span>
@@ -442,17 +461,17 @@ case 'projects':
 <span style="color: #FFFF00;">[1]</span> <span style="color: #00FF00;">Local Music Downloader</span>
     └─ Optimization in downloading and managing free music
     └─ Tech: Python, Matplotlib
-    └─ GitHub: https://github.com/spooky1703/SoundcloudDWN
+    └─ GitHub: https://github.com/spooky1703/SoundcloudDWN  
 
 <span style="color: #FFFF00;">[2]</span> <span style="color: #00FF00;">Black Hole Simulator</span>
     └─ Predictive models with supervised ML
     └─ Tech: C++, Applied Mathematics
-    └─ GitHub: https://github.com/spooky1703/blackHole_Simulator
+    └─ GitHub: https://github.com/spooky1703/blackHole_Simulator  
 
 <span style="color: #FFFF00;">[3]</span> <span style="color: #00FF00;">Competitive Algorithm</span>
     └─ Efficient algorithms for competitions
     └─ Tech: C++, Advanced algorithms
-    └─ GitHub: https://github.com/spooky1703/OMEGAUP
+    └─ GitHub: https://github.com/spooky1703/OMEGAUP  
 
 <span style="color: #FFFF00;">[4]</span> <span style="color: #00FF00;">Predictive Analysis</span>
     └─ Time series and regression
@@ -462,7 +481,7 @@ case 'projects':
 <span style="color: #FFFF00;">[5]</span> <span style="color: #00FF00;">Virtual Whiteboard</span>
     └─ Interactive dashboards
     └─ Tech: Python, Cv2
-    └─ GitHub: https://github.com/spooky1703/Virtual_Paint2
+    └─ GitHub: https://github.com/spooky1703/Virtual_Paint2  
 
 </pre>`;
                 
@@ -473,7 +492,7 @@ case 'projects':
 =====================================</span>
 
 <span style="color: #00FF00;">Email:</span>    ryverz.alonso@gmail.com
-<span style="color: #00FF00;">GitHub:</span>   https://github.com/spooky1703
+<span style="color: #00FF00;">GitHub:</span>   https://github.com/spooky1703  
 <span style="color: #00FF00;">Location:</span> México
 
 <span style="color: #FFFF00;">[!]</span> Estoy siempre abierto a nuevos proyectos,
@@ -489,7 +508,7 @@ case 'projects':
 =====================================</span>
 
 <span style="color: #00FF00;">Email:</span>    ryverz.alonso@gmail.com
-<span style="color: #00FF00;">GitHub:</span>   https://github.com/spooky1703
+<span style="color: #00FF00;">GitHub:</span>   https://github.com/spooky1703  
 <span style="color: #00FF00;">Location:</span> México
 
 <span style="color: #FFFF00;">[!]</span> I'm always open to new projects,
@@ -505,7 +524,7 @@ case 'projects':
                     return lang === 'es' ? `<pre style="color: #00FF00; line-height: 1.6;">
 <span style="color: #FFFF00;">[+] EXPERIENCIA COMPETITIVA [+]</span>
 
-<span style="color: #00FFFF;">&gt;&gt;&gt; OLIMPIADA MEXICANA DE INFORMÁTICA &lt;&lt;&lt;</span>
+<span style="color: #00FFFF;">>>> OLIMPIADA MEXICANA DE INFORMÁTICA <<<</span>
 
 <span style="color: #00FF00;">Status:</span> REPRESENTANTE ESTATAL
 <span style="color: #00FF00;">Nivel:</span>  COMPETENCIA NACIONAL
@@ -525,7 +544,7 @@ estructuras de datos y pensamiento computacional.
 </pre>` : `<pre style="color: #00FF00; line-height: 1.6;">
 <span style="color: #FFFF00;">[+] COMPETITIVE EXPERIENCE [+]</span>
 
-<span style="color: #00FFFF;">&gt;&gt;&gt; MEXICAN INFORMATICS OLYMPIAD &lt;&lt;&lt;</span>
+<span style="color: #00FFFF;">>>> MEXICAN INFORMATICS OLYMPIAD <<<</span>
 
 <span style="color: #00FF00;">Status:</span> STATE REPRESENTATIVE
 <span style="color: #00FF00;">Level:</span>  NATIONAL COMPETITION
@@ -546,7 +565,7 @@ computational thinking.
                 
                 case 'github':
                     return lang === 'es' ? `<pre style="color: #00FF00; line-height: 1.6;">
-<span style="color: #00FFFF;">&gt;&gt;&gt; PERFIL DE GITHUB &lt;&lt;&lt;</span>
+<span style="color: #00FFFF;">>>> PERFIL DE GITHUB <<<</span>
 
 <span style="color: #00FF00;">Usuario:</span> spooky1703
 <span style="color: #00FF00;">URL:</span> https://github.com/spooky1703?tab=repositories
@@ -559,10 +578,10 @@ computational thinking.
 
 <span style="color: #FFFF00;">Tip:</span> Visita el perfil para explorar todos los proyectos
 </pre>` : `<pre style="color: #00FF00; line-height: 1.6;">
-<span style="color: #00FFFF;">&gt;&gt;&gt; GITHUB PROFILE &lt;&lt;&lt;</span>
+<span style="color: #00FFFF;">>>> GITHUB PROFILE <<<</span>
 
 <span style="color: #00FF00;">Username:</span> spooky1703
-<span style="color: #00FF00;">URL:</span> https://github.com/spooky1703?tab=repositories
+<span style="color: #00FF00;">URL:</span>   https://github.com/spooky1703?tab=repositories
 
 <span style="color: #FFFF00;">Public repositories:</span>
 <span style="color: #00FF00;">[+]</span> Data Science projects
@@ -723,7 +742,8 @@ computational thinking.
         
         // ==================== INICIALIZACIÓN ====================
         window.onload = function() {
-            initLanguageSelector();
+            // Ya no se necesita initLanguageSelector con teclas
+            // Los botones manejan la selección directamente
         };
     </script>
 </body>
